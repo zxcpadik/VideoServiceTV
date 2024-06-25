@@ -1,0 +1,42 @@
+<html>
+    <head>
+        <script>
+            var videos = [];
+            var currentIndex = 0;
+            async function runUpdate() {
+                new Promise(r => {
+                    try {
+                        fetch('/video').then(e => {
+                            e.json().then(x => {
+                                videos = x;
+                                document.getElementById('player').play();
+                                return r(undefined);
+                            });
+                        });
+                    } catch {}
+                }).then(setTimeout(runUpdate, 60000)).catch(setTimeout(runUpdate, 60000))
+            }
+
+            function nextVideo() {
+                currentIndex++;
+                if (currentIndex >= videos.length) {
+                    currentIndex = 0;
+                }
+
+                if (videos.length > 0) {
+                    document.getElementById('player').src = `/video/${videos[currentIndex]}`;
+                    document.getElementById('player').play();
+                }
+            }
+
+            runUpdate();
+            setTimeout(nextVideo, 5000);
+        </script>
+    </head>
+
+    <body style="margin: 0px;">
+        <video id="player" preload="auto" autoplay onended="nextVideo()" style="width: 100%; height: 100%;">
+
+        </video>
+    </body>
+</html>
