@@ -46,6 +46,7 @@ export module VideoService {
 
     export function GetVideoPath(name: string) {
         let videos = GetVideoPathList();
-        return videos[name] ? path.join(process.cwd(), videos[name]) : undefined;
+        var rnd = videos[Math.floor(Math.random() * Object.keys(videos).length)]; // Push random video if not exist
+        return videos[name] ? path.join(process.cwd(), videos[name]) : rnd;
     }
 }

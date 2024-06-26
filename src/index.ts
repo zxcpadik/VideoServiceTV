@@ -3,10 +3,17 @@ import { AuthService } from './auth-service';
 import { VideoService } from './video-service';
 import multer from 'multer';
 import path from 'path';
+import { WatchDogService } from './watchdog-service';
 const upload = multer({ dest: 'uploads/' })
 const port = 3000; // MOVE TO .ENV
 
 const app = Express();
+
+
+app.get('/status', (req, res, next) => {
+    if ((req.query['hash'] as string | undefined)) WatchDogService.PushDeviceHash(req.query['hash'] as string);
+    res.send();
+})
 
 app.get('/video', (req, res, next) => {
     return res.json(VideoService.GetVideoList());
